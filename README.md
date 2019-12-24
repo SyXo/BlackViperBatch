@@ -1,4 +1,4 @@
-#### Batch script to set Windows 10's services based on updated Black Viper's configuration.
+### Batch script to set Windows 10's services based on Black Viper's configuration.
 
 Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software.
 
