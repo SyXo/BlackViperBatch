@@ -20,7 +20,7 @@ Powershell "Get-WmiObject win32_service | ? Name -notlike '*_*' | ? PathName -li
 Powershell "(Get-Content Backup.txt | Select -Skip 1) -replace 'Auto\",\"True','DelayedAuto' -replace ',\"False\"','' -replace ',\"True\"','' | Set-Content Backup.txt"
 
 findstr /vixg:Backup.txt %configFile% >"%Temp%\diff.csv"
-rem set configFile=%Temp%\diff.csv
+set configFile=%Temp%\diff.csv
 
 setlocal enableDelayedExpansion
 if %backupAsReg%==yes call :regBackup
