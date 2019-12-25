@@ -4,9 +4,9 @@
 :: Configuration file (must be in CSV format)
 set configFile=BlackViper.txt
 :: Backup as registry file (yes|no)
-set backupAsReg=yes
+set backupAsReg=no
 :: Runs without apply changes (yes|no)
-set dryRun=yes
+set dryRun=no
 :: Services that cannot be disabled (will be skipped)
 set skipped=AppIDSvc AppXSvc BFE BrokerInfrastructure ClipSVC CoreMessagingRegistrar DcomLaunch Dnscache embeddedmode EntAppSvc gpsvc msiserver NgcCtnrSvc NgcSvc RpcEptMapper RpcSs Schedule SecurityHealthService SgrmBroker sppsvc sppsvc StateRepository SystemEventsBroker TimeBrokerSvc UsoSvc UsoSvc WaaSMedicSvc WinHttpAutoProxySvc wscsvc wscsvc wuauserv xbgm
 
