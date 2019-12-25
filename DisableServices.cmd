@@ -15,18 +15,17 @@ set skipped=AppIDSvc AppXSvc BFE BrokerInfrastructure ClipSVC CoreMessagingRegis
 reg query "HKU\S-1-5-19" >nul
 if not %errorlevel%==0 if %dryRun%==no (Powershell "Start-Process -FilePath '%0' -Verb RunAs" & exit)
 pushd "%~dp0"
-if %dryRun%==no color 4f
-title %~n0.cmd
-cls
 
 Powershell "Get-WmiObject win32_service | ? Name -notlike '*_*' | ? PathName -like '*System32*' | Select Name, StartMode, DelayedAutoStart | Export-CSV -Path Backup.txt -NoTypeInformation"
 Powershell "(Get-Content Backup.txt | Select -Skip 1) -replace 'Auto\",\"True','DelayedAuto' -replace ',\"False\"','' -replace ',\"True\"','' | Set-Content Backup.txt"
 
 findstr /vixg:Backup.txt %configFile% >"%Temp%\diff.csv"
-set configFile=%Temp%\diff.csv
+rem set configFile=%Temp%\diff.csv
 
 setlocal enableDelayedExpansion
 if %backupAsReg%==yes call :regBackup
+rem if %dryRun%==no color 4f
+cls
 
 for /f "tokens=1,2 delims=," %%a in (%configFile%) do (
   set str=
@@ -39,14 +38,21 @@ for /f "tokens=1,2 delims=," %%a in (%configFile%) do (
     if %%~b==Disabled sc config %%~a start=disabled || set err=!err! %%~a
     echo !err! | find "%%~a" && set str=Failed
     ) >nul 2>&1
-  if "!str!"=="" (echo %%~a ^> %%~b) else (echo %%~a = !str!)
+  if not "!str!"=="" (echo %%~a = !str!) else (call :colEcho %%~a %%~b)
+  rem if ... else (echo %%~a ^> %%~b) 
   rem set "name=%%~a                              "
   rem echo !name:~0,30! ^> %%~b
 )
 rem echo set skipped=%err%
 echo.
 echo Press any key to exit . . . & pause >nul
-color
+exit /b
+
+:colEcho
+if %2==DelayedAuto echo [92m%1 ^> %2[0m
+if %2==Auto echo [92m%1 ^> %2[0m
+if %2==Manual echo [93m%1 ^> %2[0m
+if %2==Disabled echo [91m%1 ^> %2[0m
 exit /b
 
 :regBackup
